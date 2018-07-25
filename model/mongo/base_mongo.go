@@ -1,14 +1,14 @@
 package mongo
 
 import (
+	"errors"
 	"fmt"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"github.com/inhere/go-gin-skeleton/app"
-	"errors"
+	"log"
 	"reflect"
 	"strings"
-	"log"
 )
 
 // Collection mongodb collection interface
@@ -96,8 +96,8 @@ func WithCollection(collection string, s func(*mgo.Collection) error) error {
 }
 
 /**
- ========================= some command functions =========================
- */
+========================= some command functions =========================
+*/
 
 // FindById Finding a record by primary key ID
 // usage:
@@ -266,7 +266,7 @@ func TransList2BsonM(ls []string) (bm bson.M) {
 
 // fieldsString2BsonM trans "col1,col2" to bson.M{"col1": 1,"col1": 1}
 // fields string eg "col1,col2,...."
-func fieldsString2BsonM(fields string) (bson.M) {
+func fieldsString2BsonM(fields string) bson.M {
 	var bm = bson.M{}
 
 	if len(fields) == 0 || fields == "*" {

@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/ini"
-	"github.com/inhere/go-gin-skeleton/model"
 	"github.com/inhere/go-gin-skeleton/app/utils"
+	"github.com/inhere/go-gin-skeleton/model"
 
 	"github.com/inhere/go-gin-skeleton/app/cache"
 	"log"
