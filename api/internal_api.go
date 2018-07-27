@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gookit/ini"
 	"github.com/inhere/go-gin-skeleton/app"
 )
 
@@ -20,7 +19,7 @@ type InternalApi struct {
 func (a *InternalApi) Config(c *gin.Context) {
 	key := c.Query("key")
 	if key == "" {
-		key = ini.DefSection
+		key = app.Cfg.DefSection()
 	}
 
 	val, _ := app.Cfg.StringMap(key)

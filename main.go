@@ -3,6 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	// boot and init some services(log, cache, eureka)
+	"github.com/inhere/go-gin-skeleton/app"
+
+	// init redis, mongo, mysql connection
+	_ "github.com/inhere/go-gin-skeleton/model/mongo"
+	_ "github.com/inhere/go-gin-skeleton/model/mysql"
+	_ "github.com/inhere/go-gin-skeleton/model/rds"
+
+	"github.com/inhere/go-gin-skeleton/app/middleware"
 	"github.com/inhere/go-gin-skeleton/route"
 	"log"
 	"os"

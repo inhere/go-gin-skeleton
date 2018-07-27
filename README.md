@@ -8,11 +8,12 @@
 - cli CLI命令行应用
 - web web应用
 
-## 使用的Golang库
+## 使用的包
 
 - gin框架: [gin-gonic/gin](https://github.com/gin-gonic/gin) 
 - ini配置：[gookit/ini](https://github.com/gookit/ini)
 - 日志记录：[go.uber.org/zap](https://github.com/uber-go/zap)
+- 日志记录：[sirupsen/logrus](https://github.com/sirupsen/logrus)
 - mysql等：[go-xorm/xorm](https://github.com/go-xorm/xorm)
 - mongodb: [github.com/globalsign/mgo](https://github.com/globalsign/mgo)
 - cache, redis: [garyburd/redigo](https://github.com/garyburd/redigo/redis)
