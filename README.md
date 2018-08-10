@@ -14,6 +14,7 @@
 - ini配置：[gookit/ini](https://github.com/gookit/ini)
 - 日志记录：[go.uber.org/zap](https://github.com/uber-go/zap)
 - 日志记录：[sirupsen/logrus](https://github.com/sirupsen/logrus)
+  - https://github.com/rifflock/lfshook
 - mysql等：[go-xorm/xorm](https://github.com/go-xorm/xorm)
 - mongodb: [github.com/globalsign/mgo](https://github.com/globalsign/mgo)
 - cache, redis: [garyburd/redigo](https://github.com/garyburd/redigo/redis)
@@ -27,7 +28,8 @@
 - dep 使用dep来安装管理依赖库
 - swagger 文档生成：可以使用go-swagger 或者 [swaggo/swag](https://github.com/swaggo/swag)
 - stretchr/testify 测试辅助库，方便快速断言 [stretchr/testify](https://github.com/stretchr/testify)
-
+  - 常用的是它的断言包 `github.com/stretchr/testify/assert`
+    
 ## 额外组件
 
 - swagger UI: swagger文档渲染
