@@ -14,8 +14,8 @@ import (
 	_ "github.com/inhere/go-gin-skeleton/model/mysql"
 	_ "github.com/inhere/go-gin-skeleton/model/rds"
 
-	"github.com/inhere/go-gin-skeleton/app/middleware"
-	"github.com/inhere/go-gin-skeleton/route"
+	"github.com/inhere/go-gin-skeleton/web"
+	"github.com/inhere/go-gin-skeleton/web/middleware"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 	// global middleware
 	r.Use(middleware.RequestLog())
 
-	route.AddRoutes(r)
+	web.AddRoutes(r)
 
 	log.Printf("======================== Begin Running(PID: %d) ========================", os.Getpid())
 

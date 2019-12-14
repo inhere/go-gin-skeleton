@@ -4,7 +4,6 @@ docs/
 tests/
 temp/
 swagger/
-Gopkg.lock
 *.md
 *.tmp
 *.map

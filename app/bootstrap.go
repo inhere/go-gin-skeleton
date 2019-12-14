@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gookit/ini"
+	"github.com/gookit/ini/v2"
 	"github.com/inhere/go-gin-skeleton/app/utils"
 	"github.com/inhere/go-gin-skeleton/model"
 

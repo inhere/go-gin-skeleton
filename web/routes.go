@@ -1,20 +1,19 @@
-package route
+package web
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/inhere/go-gin-skeleton/api"
 )
 
 // AddRoutes
 func AddRoutes(r *gin.Engine) {
-	r.GET("/", api.Home)
+	r.GET("/", Home)
 
 	r.LoadHTMLFiles("res/views/swagger.tpl")
-	r.GET("/api-docs", api.SwagDoc)
+	r.GET("/api-docs", SwagDoc)
 
 	// status
-	r.GET("/health", api.AppHealth)
-	r.GET("/status", api.AppStatus)
+	r.GET("/health", AppHealth)
+	r.GET("/status", AppStatus)
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -24,9 +23,9 @@ func AddRoutes(r *gin.Engine) {
 
 	v1 := r.Group("/v1")
 	{
-		v1.GET("/health", api.AppHealth)
+		v1.GET("/health", AppHealth)
 
-		internal := new(api.InternalApi)
+		internal := new(InternalApi)
 		v1.GET("/config", internal.Config)
 	}
 
@@ -37,7 +36,7 @@ func AddRoutes(r *gin.Engine) {
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(
 			404,
-			api.JsonMapData{0, "page not found", map[string]string{}},
+			JsonMapData{0, "page not found", map[string]string{}},
 		)
 	})
 }

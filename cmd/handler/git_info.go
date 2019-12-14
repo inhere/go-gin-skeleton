@@ -7,7 +7,7 @@ import (
 
 	"github.com/gookit/color"
 	cli "github.com/gookit/gcli/v2"
-	cliutil "github.com/gookit/gcli/v2/utils"
+	"github.com/gookit/goutil/cliutil"
 	"github.com/inhere/go-gin-skeleton/app/utils"
 	"github.com/inhere/go-gin-skeleton/model"
 )

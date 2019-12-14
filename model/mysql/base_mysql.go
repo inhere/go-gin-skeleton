@@ -8,9 +8,8 @@ import (
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/core"
-	"github.com/go-xorm/xorm"
 	"github.com/inhere/go-gin-skeleton/app"
+	"xorm.io/xorm"
 )
 
 var engine *xorm.Engine
@@ -44,7 +43,7 @@ func init() {
 
 	if app.Debug {
 		engine.ShowSQL(true)
-		engine.Logger().SetLevel(core.LOG_DEBUG)
+		engine.Logger().SetLevel(xorm.LOG_DEBUG)
 	}
 
 	// replace

@@ -3,6 +3,7 @@ package app
 import (
 	"os"
 
+	"github.com/gookit/i18n"
 	"github.com/inhere/go-gin-skeleton/model"
 )
 
@@ -34,6 +35,10 @@ var (
 	GitInfo  model.GitInfoData
 
 	HttpPort = 59440
+)
+
+var (
+	I18n *i18n.I18n
 )
 
 // the app work dir path
