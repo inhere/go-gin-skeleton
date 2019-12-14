@@ -28,6 +28,7 @@ clean:
   apidoc:     ## Generate swagger UI document json
 apidoc:
 	swag init -o static
+	mv static/docs.go web/api_docs.go
 
   pack:       ## Build and package the application
 pack:
@@ -36,25 +37,29 @@ pack:
 
   pbprod:     ## Build prod docker image and push to your hub
 pbprod:
-	go build ./cli/cliapp.go && ./cliapp git
+	go build ./cmd/cliapp.go && ./cliapp git:info
 	docker build -f Dockerfile -t your.dockerhub.com/go-gin-skeleton --build-arg app_env=prod .
 	docker push your.dockerhub.com/go-gin-skeleton
 
   pbtest:     ## Build test docker image and push to your hub
 pbtest:
-	go build ./cli/cliapp.go && ./cliapp git
+	go build ./cmd/cliapp.go && ./cliapp git:info
 	docker build -f Dockerfile -t your.dockerhub.com/go-gin-skeleton:test --build-arg app_env=test .
 	docker push your.dockerhub.com/go-gin-skeleton:test
 
   pbaudit:    ## Build audit docker image and push to your hub
 pbaudit:
-	go build ./cli/cliapp.go && ./cliapp git
+	go build ./cmd/cliapp.go && ./cliapp git:info
 	docker build -f Dockerfile -t your.dockerhub.com/go-gin-skeleton:audit --build-arg app_env=audit .
 	docker push your.dockerhub.com/go-gin-skeleton:audit
 
   devimg:     ## Build dev docker image
 devimg:
 	docker build -f Dockerfile --build-arg app_env=dev -t go-gin-skeleton:dev .
+
+  gitinfo:     ## Generate git info
+gitinfo:
+	go build ./cmd/cliapp.go && ./cliapp git:info
 
 ##
 ##Tests Commands:

@@ -22,9 +22,9 @@ sqlLog = "/data/logs/{hostname}_apt_sql-{date}.log"
 disable = true
 host = "127.0.0.1"
 port = 3306
+name = "db_test"
 user = "root"
 password = "123456"
-name = "db_test"
 maxIdleConn = 1024
 maxOpenConn = 200
 

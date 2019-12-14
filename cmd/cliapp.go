@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 
 	"github.com/gookit/gcli/v2"
@@ -16,12 +17,22 @@ func main() {
 	app.Version = "1.0.3"
 	app.Description = "this is my cli application"
 
-	app.SetVerbose(cliapp.VerbDebug)
+	// app.SetVerbose(gcli.VerbDebug)
 	// app.DefaultCmd("exampl")
 
 	app.Add(handler.GitCommand())
 	// app.Add(cmd.ColorCommand())
-	app.Add(builtin.GenShAutoComplete())
-	// fmt.Printf("%+v\n", cliapp.CommandNames())
+	app.Add(builtin.GenAutoCompleteScript())
+
+	app.Add(&gcli.Command{
+		Name:   "test",
+		UseFor: "an test command",
+		Func: func(c *gcli.Command, args []string) error {
+			fmt.Println("hello")
+			return nil
+		},
+	})
+
+	// fmt.Printf("%+v\n", gcli.CommandNames())
 	app.Run()
 }
