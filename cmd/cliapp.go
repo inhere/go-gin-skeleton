@@ -13,18 +13,18 @@ import (
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	app := gcli.NewApp()
-	app.Version = "1.0.3"
-	app.Description = "this is my cli application"
+	cli := gcli.NewApp()
+	cli.Version = "1.0.3"
+	cli.Description = "this is my cli application"
 
-	// app.SetVerbose(gcli.VerbDebug)
-	// app.DefaultCmd("exampl")
+	// cli.SetVerbose(gcli.VerbDebug)
+	// cli.DefaultCmd("exampl")
 
-	app.Add(handler.GitCommand())
-	// app.Add(cmd.ColorCommand())
-	app.Add(builtin.GenAutoCompleteScript())
+	cli.Add(handler.GitCommand())
+	// cli.Add(cmd.ColorCommand())
+	cli.Add(builtin.GenAutoCompleteScript())
 
-	app.Add(&gcli.Command{
+	cli.Add(&gcli.Command{
 		Name:   "test",
 		UseFor: "an test command",
 		Func: func(c *gcli.Command, args []string) error {
@@ -34,5 +34,5 @@ func main() {
 	})
 
 	// fmt.Printf("%+v\n", gcli.CommandNames())
-	app.Run()
+	cli.Run()
 }

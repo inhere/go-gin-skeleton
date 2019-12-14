@@ -28,7 +28,9 @@ clean:
   apidoc:     ## Generate swagger UI document json
 apidoc:
 	swag init -o static
-	mv static/docs.go web/api_docs.go
+# 	mv static/docs.go web/api_docs.go
+	rm static/docs.go
+# 	sed -i 's/package\ docs/package\ web/' web/api_docs.go
 
   pack:       ## Build and package the application
 pack:

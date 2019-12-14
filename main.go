@@ -9,12 +9,13 @@ import (
 	"time"
 
 	"github.com/gookit/color"
+	"github.com/inhere/go-gin-skeleton/web"
+
 	// boot and init some services(log, cache, eureka)
 	"github.com/inhere/go-gin-skeleton/app"
 	"github.com/inhere/go-gin-skeleton/model/mongo"
 	"github.com/inhere/go-gin-skeleton/model/myrds"
 	"github.com/inhere/go-gin-skeleton/model/mysql"
-	"github.com/inhere/go-gin-skeleton/web"
 )
 
 func init()  {
@@ -22,7 +23,9 @@ func init()  {
 	app.Bootstrap("./config")
 
 	// - redis, mongo, mysql connection
-	myrds.InitRedis()
+	err = myrds.InitRedis()
+	checkError("Rds init error:", err)
+
 	err = mysql.InitMysql()
 	checkError("Db init error:", err)
 
@@ -44,7 +47,7 @@ func main() {
 
 func checkError(prefix string, err error)  {
 	if err != nil {
-		color.Error.Println("Db init error:", err.Error())
+		color.Error.Println(prefix, err.Error())
 		os.Exit(2)
 	}
 }
@@ -74,6 +77,7 @@ func handleSignals(c chan os.Signal) {
 	// sync logs
 	_ = app.Logger.Sync()
 	_ = mysql.Close()
+	_ = myrds.ClosePool()
 	mongo.Close()
 
 	// unregister from eureka

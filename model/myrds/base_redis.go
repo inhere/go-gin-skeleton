@@ -2,22 +2,27 @@ package myrds
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/inhere/go-gin-skeleton/app"
 	"go.uber.org/zap"
 )
 
-var pool *redis.Pool
 type rdsConfig struct{
 	Server string
 	Auth string
 	Db int
+
+	Disable bool
 }
 
+var (
+	cfg rdsConfig
+	pool *redis.Pool
+)
+
 // redisPrefix
-const redisPrefix = "feeds:"
+const redisPrefix = "rds:"
 
 // GenRedisKey
 func GenRedisKey(tpl string, keys ...interface{}) string {
@@ -30,19 +35,31 @@ func GenRedisKey(tpl string, keys ...interface{}) string {
 
 // init redis connection pool
 // redigo doc https://godoc.org/github.com/gomodule/redigo/redis#pkg-examples
-func InitRedis() {
-	conf := app.Config.StringMap("redis")
-
+func InitRedis() (err error) {
 	// 从配置文件获取redis的ip以及db
-	redisUrl := conf["server"]
-	password := conf["auth"]
-	redisDb, _ := strconv.Atoi(conf["db"])
+	err = app.Config.MapStruct("redis", &cfg)
+	if err != nil {
+		return
+	}
 
-	fmt.Printf("redis - server=%s db=%d auth=%s\n", redisUrl, redisDb, password)
+	if cfg.Disable {
+		return
+	}
+
+	fmt.Printf("redis - server=%s db=%d auth=%s\n", cfg.Server, cfg.Db, cfg.Auth)
 
 	// 建立连接池
-	pool = app.NewRedisPool(redisUrl, password, redisDb)
+	pool = app.NewRedisPool(cfg.Server, cfg.Auth, cfg.Db)
 	// closePool()
+	return
+}
+
+func ClosePool() error {
+	if cfg.Disable {
+		return nil
+	}
+
+	return pool.Close()
 }
 
 // Connection return redis connection.
