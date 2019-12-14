@@ -2,10 +2,11 @@ package rds
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/garyburd/redigo/redis"
 	"github.com/inhere/go-gin-skeleton/app"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 var pool *redis.Pool

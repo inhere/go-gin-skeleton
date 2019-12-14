@@ -2,9 +2,10 @@ package api
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/inhere/go-gin-skeleton/app"
-	"strconv"
 )
 
 // JsonData is api response body structure. HttpRes

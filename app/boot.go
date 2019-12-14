@@ -2,7 +2,9 @@ package app
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/ini"
@@ -10,8 +12,6 @@ import (
 	"github.com/inhere/go-gin-skeleton/model"
 
 	"github.com/inhere/go-gin-skeleton/app/cache"
-	"log"
-	"strconv"
 )
 
 // Cfg application config

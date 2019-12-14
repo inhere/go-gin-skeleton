@@ -1,14 +1,15 @@
-package cmd
+package handler
 
 import (
 	"fmt"
-	cli "github.com/gookit/cliapp"
-	cliutil "github.com/gookit/cliapp/utils"
-	"github.com/gookit/color"
-	"github.com/inhere/go-gin-skeleton/app/utils"
-	"github.com/inhere/go-gin-skeleton/model"
 	"log"
 	"strings"
+
+	"github.com/gookit/color"
+	cli "github.com/gookit/gcli/v2"
+	cliutil "github.com/gookit/gcli/v2/utils"
+	"github.com/inhere/go-gin-skeleton/app/utils"
+	"github.com/inhere/go-gin-skeleton/model"
 )
 
 var gitOpts GitOpts

@@ -2,8 +2,9 @@ package app
 
 import (
 	"fmt"
-	"github.com/gookit/i18n"
 	"strings"
+
+	"github.com/gookit/i18n"
 )
 
 func initLanguage() {

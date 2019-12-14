@@ -3,12 +3,13 @@ package mongo
 import (
 	"errors"
 	"fmt"
-	"github.com/globalsign/mgo"
-	"github.com/globalsign/mgo/bson"
-	"github.com/inhere/go-gin-skeleton/app"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
+	"github.com/inhere/go-gin-skeleton/app"
 )
 
 // Collection mongodb collection interface

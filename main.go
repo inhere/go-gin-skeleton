@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	// boot and init some services(log, cache, eureka)
 	"github.com/inhere/go-gin-skeleton/app"
@@ -13,8 +16,6 @@ import (
 
 	"github.com/inhere/go-gin-skeleton/app/middleware"
 	"github.com/inhere/go-gin-skeleton/route"
-	"log"
-	"os"
 )
 
 func main() {

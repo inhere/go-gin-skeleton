@@ -2,14 +2,15 @@ package mysql
 
 import (
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/core"
-	"github.com/go-xorm/xorm"
-	"github.com/inhere/go-gin-skeleton/app"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-xorm/core"
+	"github.com/go-xorm/xorm"
+	"github.com/inhere/go-gin-skeleton/app"
 )
 
 var engine *xorm.Engine

@@ -1,9 +1,10 @@
 package api
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/inhere/go-gin-skeleton/app"
-	"os"
 )
 
 func Home(c *gin.Context) {

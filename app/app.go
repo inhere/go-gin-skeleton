@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/inhere/go-gin-skeleton/model"
 	"os"
+
+	"github.com/inhere/go-gin-skeleton/model"
 )
 
 // allowed app env name

@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"fmt"
+	"io/ioutil"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/inhere/go-gin-skeleton/app"
 	"github.com/inhere/go-gin-skeleton/app/utils"
 	"go.uber.org/zap"
-	"io/ioutil"
-	"time"
 )
 
 func RequestLog() gin.HandlerFunc {

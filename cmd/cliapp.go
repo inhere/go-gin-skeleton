@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/gookit/cliapp"
-	"github.com/gookit/cliapp/builtin"
-	"github.com/inhere/go-gin-skeleton/cli/cmd"
 	"runtime"
+
+	"github.com/gookit/gcli/v2/builtin"
+	"github.com/inhere/go-gin-skeleton/cli/cmd"
 )
 
 // for test run: go build ./demo/cliapp.go && ./cliapp
