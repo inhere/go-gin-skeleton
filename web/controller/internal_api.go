@@ -17,12 +17,14 @@ type InternalApi struct {
 // @Failure 403 body is empty
 // @router /config [get]
 func (a *InternalApi) Config(c *gin.Context) {
+	var data interface{}
+
 	key := c.Query("key")
 	if key == "" {
-		key = app.Config.DefSection()
+		data = app.Config.Data()
+	} else {
+		data = app.Config.Get(key)
 	}
 
-	val, _ := app.Config.StringMap(key)
-
-	c.JSON(200, val)
+	c.JSON(200, data)
 }

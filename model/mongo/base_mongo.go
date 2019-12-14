@@ -21,18 +21,32 @@ type Collection interface {
 type DebugLogger struct {
 }
 
+type mgoConfig struct {
+	Auth string
+	Uri string
+	Servers string
+	Database string
+	Disable bool
+}
+
 var (
+	cfg mgoConfig
 	connection *mgo.Session
-
-	auth, servers, mgoUri, database string
-)
-
-var (
 	invalidObjectId = errors.New("mongo: must provide an valid document Id")
 )
 
-func InitMongo() {
-	fmt.Printf("mongo - %s db=%s\n", servers, database)
+func InitMongo() (err error) {
+	// get config
+	err = app.Config.MapStruct("mgo", &cfg)
+	if err != nil {
+		return
+	}
+
+	if cfg.Disable {
+		return
+	}
+
+	fmt.Printf("mongo - %s db=%s\n", cfg.Servers, cfg.Database)
 
 	if app.Debug {
 		// 设为 true 数据打印太多了
@@ -40,14 +54,8 @@ func InitMongo() {
 		// mgo.SetLogger(DebugLogger{})
 	}
 
-	// get config
-	auth = app.Config.String("mgo.auth")
-	mgoUri = app.Config.String("mgo.uri")
-	servers = app.Config.String("mgo.servers")
-	database = app.Config.String("mgo.database")
-
 	// create connection
-	createConnection()
+	return createConnection()
 }
 
 func (d DebugLogger) Output(callDepth int, s string) error {
@@ -56,18 +64,17 @@ func (d DebugLogger) Output(callDepth int, s string) error {
 }
 
 // Create connection
-func createConnection() {
-	var err error
-	connection, err = mgo.Dial(auth + "@" + servers + mgoUri)
-
+func createConnection() (err error) {
+	connection, err = mgo.Dial(cfg.Auth + "@" + cfg.Servers + cfg.Uri)
 	if err != nil {
-		panic(err) // 直接终止程序运行
+		return
 	}
 
 	// Optional. Switch the session to a monotonic behavior.
 	// connection.SetMode(mgo.Monotonic, true)
 	// 最大连接池默认为 4096
 	connection.SetPoolLimit(1024)
+	return
 }
 
 // Connection return mongodb connection.
@@ -76,10 +83,6 @@ func createConnection() {
 //   defer conn.Close()
 //   ... do something ...
 func Connection() *mgo.Session {
-	if connection == nil {
-		createConnection()
-	}
-
 	return connection.Clone()
 }
 
@@ -91,7 +94,7 @@ func Connection() *mgo.Session {
 func WithCollection(collection string, s func(*mgo.Collection) error) error {
 	conn := Connection()
 	defer conn.Close()
-	c := conn.DB(database).C(collection)
+	c := conn.DB(cfg.Database).C(collection)
 
 	return s(c)
 }
@@ -99,6 +102,15 @@ func WithCollection(collection string, s func(*mgo.Collection) error) error {
 // Conn return connection
 func Conn() *mgo.Session  {
 	return connection
+}
+
+// Close connection
+func Close() {
+	if cfg.Disable {
+		return
+	}
+
+	connection.Close()
 }
 
 /**
@@ -175,7 +187,6 @@ func FindAllByPage(cName string, query bson.M, sort string, fields string, page 
 	}
 
 	err = WithCollection(cName, af)
-
 	return
 }
 
@@ -187,7 +198,7 @@ func UpdateById(cName string, id string, change bson.M) (code int, err error) {
 
 	conn := Connection()
 	defer conn.Close()
-	c := conn.DB(database).C(cName)
+	c := conn.DB(cfg.Database).C(cName)
 
 	oid := bson.ObjectIdHex(id)
 	err = c.Update(
@@ -211,7 +222,7 @@ func UpdateById(cName string, id string, change bson.M) (code int, err error) {
 func UpdateBy(cName string, query bson.M, change bson.M) (code int, err error) {
 	conn := Connection()
 	defer conn.Close()
-	c := conn.DB(database).C(cName)
+	c := conn.DB(cfg.Database).C(cName)
 
 	err = c.Update(
 		// bson.M{"_id": id, "password": oldHash},

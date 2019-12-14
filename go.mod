@@ -16,6 +16,7 @@ require (
 	github.com/json-iterator/go v1.1.8
 	github.com/pkg/errors v0.8.1
 	go.uber.org/zap v1.13.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	xorm.io/core v0.7.2
 	xorm.io/xorm v0.8.0
 )

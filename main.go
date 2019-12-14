@@ -8,21 +8,29 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gookit/color"
 	// boot and init some services(log, cache, eureka)
 	"github.com/inhere/go-gin-skeleton/app"
 	"github.com/inhere/go-gin-skeleton/model/mongo"
 	"github.com/inhere/go-gin-skeleton/model/myrds"
 	"github.com/inhere/go-gin-skeleton/model/mysql"
+	"github.com/inhere/go-gin-skeleton/web"
 )
 
 func init()  {
+	var err error
 	app.Bootstrap("./config")
 
 	// - redis, mongo, mysql connection
 	myrds.InitRedis()
-	mysql.InitMysql()
-	mongo.InitMongo()
+	err = mysql.InitMysql()
+	checkError("Db init error:", err)
+
+	err = mongo.InitMongo()
+	checkError("Mgo init error:", err)
 	// initEurekaService()
+
+	web.InitServer()
 }
 
 func main() {
@@ -31,8 +39,14 @@ func main() {
 	// init services
 	log.Printf("======================== Begin Running(PID: %d) ========================", os.Getpid())
 
-	// default is listen and serve on 0.0.0.0:8080
-	app.Run()
+	web.Run()
+}
+
+func checkError(prefix string, err error)  {
+	if err != nil {
+		color.Error.Println("Db init error:", err.Error())
+		os.Exit(2)
+	}
 }
 
 // listenSignals Graceful start/stop server
@@ -59,15 +73,15 @@ func handleSignals(c chan os.Signal) {
 
 	// sync logs
 	_ = app.Logger.Sync()
-	_ = mysql.Db().Close()
-	mongo.Conn().Close()
+	_ = mysql.Close()
+	mongo.Close()
 
 	// unregister from eureka
 	// erkServer.Unregister()
 
 	// 等待一秒
 	time.Sleep(1e9 / 2)
-	fmt.Println("\nGoodBye...")
+	color.Info.Println("\n  GoodBye...")
 
 	os.Exit(0)
 }

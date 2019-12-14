@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -13,42 +12,57 @@ import (
 	"xorm.io/xorm"
 )
 
-var engine *xorm.Engine
+const DSNTemplate = "%s:%s@tcp(%s:%d)/%s?charset=utf8"
 
-func InitMysql() {
-	var err error
+type dbConfig struct {
+	Host string
+	Port int
+	User string
+	Name string
+	Password string
 
-	db := app.Config.StringMap("db")
-	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
-		db["user"], db["password"], db["host"], db["port"], db["name"],
-	)
+	Disable bool
+	MaxIdleConn int
+	MaxOpenConn int
+}
 
+var (
+	cfg dbConfig
+	engine *xorm.Engine
+)
+
+func InitMysql() (err error) {
+	err = app.Config.MapStruct("db", &cfg)
+	if err != nil {
+		return
+	}
+
+	if cfg.Disable {
+		return
+	}
+
+	dsn := fmt.Sprintf(DSNTemplate, cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Name, )
 	fmt.Printf("mysql - %s\n", dsn)
-
-	maxIdleConn, _ := strconv.Atoi(db["maxIdleConn"])
-	maxOpenConn, _ := strconv.Atoi(db["MaxOpenConn"])
 
 	// create engine
 	engine, err = xorm.NewEngine("mysql", dsn)
-
 	if err != nil {
-		log.Fatalf("Init mysql DB Failure! Error: %s\n", err.Error())
+		// log.Fatalf("Init mysql DB Failure! Error: %s\n", err.Error())
+		return
 	}
 
-	engine.SetMaxIdleConns(maxIdleConn)
-	engine.SetMaxOpenConns(maxOpenConn)
+	engine.SetMaxIdleConns(cfg.MaxIdleConn)
+	engine.SetMaxOpenConns(cfg.MaxOpenConn)
 
 	// core.NewCacheMapper(core.SnakeMapper{})
 	// engine.SetDefaultCacher()
-
 	if app.Debug {
 		engine.ShowSQL(true)
 		engine.Logger().SetLevel(core.LOG_DEBUG)
 	}
 
 	// replace
-	logFile := app.Config.Get("log.sqlLog")
+	logFile := app.Config.String("log.sqlLog")
 	logFile = strings.NewReplacer(
 		"{date}", app.LocTime().Format("20060102"),
 		"{hostname}", app.Hostname,
@@ -60,10 +74,20 @@ func InitMysql() {
 	}
 
 	engine.SetLogger(xorm.NewSimpleLogger(f))
+	return
 }
 
 func Db() *xorm.Engine {
 	return engine
+}
+
+// Close connection
+func Close() error {
+	if cfg.Disable {
+		return nil
+	}
+
+	return engine.Close()
 }
 
 // UpdateById

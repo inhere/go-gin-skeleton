@@ -27,7 +27,7 @@ clean:
 
   apidoc:     ## Generate swagger UI document json
 apidoc:
-	swag init -s static
+	swag init -o static
 
   pack:       ## Build and package the application
 pack:

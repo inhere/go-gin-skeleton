@@ -25,7 +25,7 @@ const (
 	PageSizeStr = "20"
 	MaxPageSize = 100
 
-	configSuffix = ".ini"
+	configSuffix = ".toml"
 )
 
 var (
