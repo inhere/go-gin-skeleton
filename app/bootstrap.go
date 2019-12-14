@@ -2,29 +2,38 @@ package app
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gookit/ini/v2"
-	"github.com/inhere/go-gin-skeleton/app/utils"
-	"github.com/inhere/go-gin-skeleton/model"
+	"github.com/gookit/color"
+	"github.com/gookit/config/v2"
+	"github.com/gookit/config/v2/dotnev"
+	"github.com/gookit/goutil/fsutil"
+	"github.com/gookit/goutil/jsonutil"
+	"github.com/gookit/i18n"
+	"github.com/inhere/go-gin-skeleton/web"
+	"github.com/inhere/go-gin-skeleton/web/middleware"
 
 	"github.com/inhere/go-gin-skeleton/app/cache"
+	// - redis, mongo, mysql services
+	"github.com/inhere/go-gin-skeleton/model"
 )
 
-// Cfg application config
-var Cfg *ini.Ini
+var (
+	I18n   *i18n.I18n
+	Config *config.Config
+	server *gin.Engine
+)
 
-func init() {
+func Bootstrap(confDir string) {
 	initAppEnv()
 
-	loadAppConfig()
+	loadAppConfig(confDir)
 
-	log.Printf(
-		"======================== Bootstrap (Env: %s, Debug: %v) ========================",
-		Env, Debug,
+	color.Info.Printf(
+		"======================== Bootstrap (EnvName: %s, Debug: %v) ========================",
+		EnvName, Debug,
 	)
 
 	initAppInfo()
@@ -34,17 +43,27 @@ func init() {
 	initLanguage()
 
 	initCache()
+}
 
-	// initEurekaService()
+func Run() {
+	initServer()
 
-	listenSignals()
+	err := server.Run(fmt.Sprintf("0.0.0.0:%d", HttpPort))
+	if err != nil {
+		color.Error.Println(err)
+	}
 }
 
 func initAppEnv() {
-	Hostname, _ = os.Hostname()
+	err := dotnev.LoadExists(".", ".env")
+	if err != nil {
+		color.Error.Println(err.Error())
+		return
+	}
 
+	Hostname, _ = os.Hostname()
 	if env := os.Getenv("APP_ENV"); env != "" {
-		Env = env
+		EnvName = env
 	}
 
 	if port := os.Getenv("APP_PORT"); port != "" {
@@ -52,7 +71,7 @@ func initAppEnv() {
 	}
 
 	// in dev, test
-	if IsEnv(DEV) || IsEnv(TEST) {
+	if IsEnv(EnvDev) || IsEnv(EnvTest) {
 		gin.SetMode(gin.DebugMode)
 	} else {
 		gin.SetMode(gin.ReleaseMode)
@@ -60,45 +79,48 @@ func initAppEnv() {
 }
 
 // loadAppConfig
-func loadAppConfig() {
-	var err error
-
-	envFile := "conf/app-" + Env + ".ini"
+func loadAppConfig(confDir string) {
+	baseFile := confDir + "app" + configSuffix
+	envFile := confDir + "/app-" + EnvName + configSuffix
 
 	fmt.Printf("- work dir: %s\n", WorkDir)
 	fmt.Printf("- load config: conf/app.ini, %s\n", envFile)
 
-	Cfg, err = ini.LoadFiles("conf/app.ini", envFile)
+	err := config.LoadFiles(baseFile, envFile)
 	if err != nil {
 		fmt.Printf("Fail to read file: %v", err)
 		os.Exit(1)
 	}
 
-	// Cfg.WriteTo(os.Stdout)
+	Config = config.Default()
+	// Config.WriteTo(os.Stdout)
 
 	// setting some info
-	Name = Cfg.MustString("name")
-	Debug = Cfg.MustBool("debug")
+	Name = Config.String("name")
+	Debug = Config.Bool("debug")
 }
 
 func initAppInfo() {
 	// ensure http port
 	if HttpPort == 0 {
-		HttpPort = Cfg.MustInt("httpPort")
+		HttpPort = Config.Int("httpPort")
 	}
 
 	// git repo info
-	GitInfo = model.GitInfoData{}
+	GitInfo = model.AppInfo{}
 	infoFile := "static/app.json"
 
-	if utils.FileExists(infoFile) {
-		utils.ReadJsonFile(infoFile, &GitInfo)
+	if fsutil.IsFile(infoFile) {
+		err := jsonutil.ReadFile(infoFile, &GitInfo)
+		if err != nil {
+			color.Error.Println(err.Error())
+		}
 	}
 }
 
 // init redis connection pool
 func initCache() {
-	conf, _ := Cfg.StringMap("cache")
+	conf := Config.StringMap("cache")
 
 	// 从配置文件获取redis的ip以及db
 	prefix := conf["prefix"]
@@ -111,4 +133,17 @@ func initCache() {
 	// 建立连接池
 	// closePool()
 	cache.Init(NewRedisPool(server, password, redisDb), prefix, Logger, Debug)
+}
+
+func initServer() {
+	server = gin.New()
+
+	if IsEnv(EnvDev) {
+		server.Use(gin.Logger(), gin.Recovery())
+	}
+
+	// global middleware
+	server.Use(middleware.RequestLog())
+
+	web.AddRoutes(server)
 }

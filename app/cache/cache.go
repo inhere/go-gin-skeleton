@@ -1,12 +1,13 @@
 package cache
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/inhere/go-gin-skeleton/app/utils"
-	"github.com/pkg/errors"
+	"github.com/gookit/goutil/mathutil"
+	"github.com/inhere/go-gin-skeleton/helper"
 	"go.uber.org/zap"
 )
 
@@ -42,7 +43,7 @@ func GetAndMapTo(key string, v interface{}) (err error) {
 	ret, err = exec("get", key)
 	if err == nil {
 		// data must convert to byte
-		return utils.JsonDecode(ret.([]byte), v)
+		return helper.JsonDecode(ret.([]byte), v)
 	}
 
 	return
@@ -59,7 +60,7 @@ func Get(key string) interface{} {
 
 // Set cache
 func Set(key string, data interface{}, ttl int) error {
-	jsonBytes, _ := utils.JsonEncode(data)
+	jsonBytes, _ := helper.JsonEncode(data)
 
 	_, err := exec("setEx", key, int64(ttl), jsonBytes)
 
@@ -102,25 +103,23 @@ func exec(commandName string, args ...interface{}) (reply interface{}, err error
 
 	}
 
+	c := Connection()
+	defer c.Close()
+
 	args[0] = fullKey
 
 	if debug {
 		st := time.Now()
-		c := Connection()
-		defer c.Close()
 		reply, err = c.Do(commandName, args...)
 
 		logger.Debug("operate redis cache: "+commandName,
 			zap.Namespace("context"),
 			zap.String("cache_key", fullKey),
-			zap.String("elapsed_time", utils.CalcElapsedTime(st)),
+			zap.String("elapsed_time", mathutil.ElapsedTime(st)),
 		)
-
 		return
 	}
 
-	c := Connection()
-	defer c.Close()
 	return c.Do(commandName, args...)
 }
 

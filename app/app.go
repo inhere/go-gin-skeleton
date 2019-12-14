@@ -3,16 +3,16 @@ package app
 import (
 	"os"
 
-	"github.com/gookit/i18n"
+	"github.com/inhere/go-gin-skeleton/helper"
 	"github.com/inhere/go-gin-skeleton/model"
 )
 
 // allowed app env name
 const (
-	PROD  = "prod"
-	AUDIT = "audit"
-	TEST  = "test"
-	DEV   = "dev"
+	EnvProd = "prod"
+	EnvPre  = "pre"
+	EnvTest = "test"
+	EnvDev  = "dev"
 )
 
 // for application
@@ -24,21 +24,23 @@ const (
 	PageSize    = 20
 	PageSizeStr = "20"
 	MaxPageSize = 100
+
+	configSuffix = ".ini"
 )
 
 var (
-	Env      = "dev"
 	Name     = "github.com/inhere/go-gin-skeleton"
+	EnvName  = EnvDev
+
 	Debug    bool
 	Hostname string
 	RootPath string
-	GitInfo  model.GitInfoData
+	// AbsPath always return abs path.
+	AbsPath = helper.GetRootPath()
 
-	HttpPort = 59440
-)
+	GitInfo  model.AppInfo
 
-var (
-	I18n *i18n.I18n
+	HttpPort = 9550
 )
 
 // the app work dir path
@@ -46,14 +48,5 @@ var WorkDir, _ = os.Getwd()
 
 // IsEnv current env name check
 func IsEnv(env string) bool {
-	return env == Env
-}
-
-// AbsPath always return abs path.
-func AbsPath(path string) string {
-	if string(path[0]) == "/" {
-		return path
-	}
-
-	return path
+	return env == EnvName
 }

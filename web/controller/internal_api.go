@@ -19,10 +19,10 @@ type InternalApi struct {
 func (a *InternalApi) Config(c *gin.Context) {
 	key := c.Query("key")
 	if key == "" {
-		key = app.Cfg.DefSection()
+		key = app.Config.DefSection()
 	}
 
-	val, _ := app.Cfg.StringMap(key)
+	val, _ := app.Config.StringMap(key)
 
 	c.JSON(200, val)
 }

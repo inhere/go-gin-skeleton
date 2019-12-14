@@ -1,46 +1,48 @@
 package app
 
-// 永远存在
-const FOREVER = 0
+const (
+	// FOREVER 永远存在
+	FOREVER = 0
 
-// 1 分钟
-const OneMinutes = 60
+	// OneMinutes 1 分钟
+	OneMinutes = 60
 
-// 2 分钟
-const TwoMinutes = 120
+	// TwoMinutes 2 分钟
+	TwoMinutes = 120
 
-// 3 分钟
-const ThreeMinutes = 180
+	// ThreeMinutes 3 分钟
+	ThreeMinutes = 180
 
-// 5 分钟
-const FiveMinutes = 300
+	// FiveMinutes 5 分钟
+	FiveMinutes = 300
 
-// 10 分钟
-const TenMinutes = 600
+	// TenMinutes 10 分钟
+	TenMinutes = 600
 
-// 半小时
-const HalfHour = 1800
+	// HalfHour 半小时
+	HalfHour = 1800
 
-// 1 小时
-const OneHour = 3600
+	// OneHour 1 小时
+	OneHour = 3600
 
-// 2 小时
-const TwoHour = 7200
+	// TwoHour 2 小时
+	TwoHour = 7200
 
-// 3 小时
-const ThreeHour = 10800
+	// ThreeHour 3 小时
+	ThreeHour = 10800
 
-// 12 小时(半天)
-const HalfDay = 43200
+	// 12 小时(半天)
+	HalfDay = 43200
 
-// 24 小时(1 天)
-const OneDay = 86400
+	// OneDay 24 小时(1 天)
+	OneDay = 86400
 
-// 2 天
-const TwoDay = 172800
+	// TwoDay 2 天
+	TwoDay = 172800
 
-// 3 天
-const ThreeDay = 259200
+	// ThreeDay 3 天
+	ThreeDay = 259200
 
-// 7 天(一周)
-const OneWeek = 604800
+	// OneWeek 7 天(一周)
+	OneWeek = 604800
+)

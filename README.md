@@ -2,11 +2,8 @@
 
 使用golang gin框架的应用骨架
 
-## 包含应用
-
-- api API接口应用
-- cli CLI命令行应用
-- web web应用
+- cmd CLI命令行应用
+- web web应用,API接口应用
 
 ## 使用的包
 
@@ -41,7 +38,7 @@
 - 首先，将骨架clone到 GOPATH 的 src下，重命名 `go-gin-skeleton` 目录为你的项目名
 - 进入到项目，将项目中 `github.com/inhere/go-gin-skeleton` 替换为你的项目名(针对go文件)
 - 再搜索将所有的`go-gin-skeleton`替换为你的项目名（主要是Dockerfile,makefile里）
-- 运行 `dep ensure` 安装依赖库到vendor
+- 运行 `go mod tiidy` 安装依赖库
 - 运行项目：`go run main.go`
 
 ## 使用帮助

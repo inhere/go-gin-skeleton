@@ -9,15 +9,16 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/inhere/go-gin-skeleton/app"
+	"xorm.io/core"
 	"xorm.io/xorm"
 )
 
 var engine *xorm.Engine
 
-func init() {
+func InitMysql() {
 	var err error
 
-	db, _ := app.Cfg.StringMap("db")
+	db := app.Config.StringMap("db")
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
 		db["user"], db["password"], db["host"], db["port"], db["name"],
@@ -43,11 +44,11 @@ func init() {
 
 	if app.Debug {
 		engine.ShowSQL(true)
-		engine.Logger().SetLevel(xorm.LOG_DEBUG)
+		engine.Logger().SetLevel(core.LOG_DEBUG)
 	}
 
 	// replace
-	logFile, _ := app.Cfg.Get("log.sqlLog")
+	logFile := app.Config.Get("log.sqlLog")
 	logFile = strings.NewReplacer(
 		"{date}", app.LocTime().Format("20060102"),
 		"{hostname}", app.Hostname,

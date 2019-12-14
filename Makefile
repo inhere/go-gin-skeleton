@@ -4,7 +4,7 @@
 # 每行命令之前必须有一个tab键。如果想用其他键，可以用内置变量.RECIPEPREFIX 声明
 # mac 下这条声明 没起作用 !!
 .RECIPEPREFIX = >
-.PHONY: all usage help clean
+.PHONY: all usage help clean config
 
 # 需要注意的是，每行命令在一个单独的shell中执行。这些Shell之间没有继承关系。
 # - 解决办法是将两行命令写在一行，中间用分号分隔。
@@ -32,7 +32,7 @@ apidoc:
   pack:       ## Build and package the application
 pack:
 	# collect git info to current env config file.
-	go build -o ./go-gin-skeleton
+	go build -o ./temp/app
 
   pbprod:     ## Build prod docker image and push to your hub
 pbprod:
@@ -65,6 +65,14 @@ test: tu
   echo:   ## echo test
 echo:
 	echo hello
+
+  lint:   ## golint check
+lint:
+	golint ./...
+
+  gofmt:   ## gofmt check
+gofmt:
+	gofmt -l ./
 
   tu:     ## Run the unit tests
 tu:

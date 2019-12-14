@@ -65,7 +65,7 @@ func (a *BaseApi) MakeRes(code int, err error, data interface{}) *JsonData {
 	}
 
 	// get output message by error code e.g err-1201
-	friendlyMsg := app.Dtr(fmt.Sprintf("err-%d", code))
+	friendlyMsg := app.I18n.Dt(fmt.Sprintf("err-%d", code))
 
 	// log and print error message
 	if err != nil {

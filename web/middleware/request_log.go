@@ -6,8 +6,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gookit/goutil/mathutil"
+	"github.com/gookit/goutil/strutil"
 	"github.com/inhere/go-gin-skeleton/app"
-	"github.com/inhere/go-gin-skeleton/app/utils"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ func RequestLog() gin.HandlerFunc {
 		// Start timer
 		start := time.Now()
 		path := c.Request.URL.Path
-		reqId := utils.GenMd5(fmt.Sprintf("%d", start.Nanosecond()))
+		reqId := strutil.Md5(fmt.Sprintf("%d", start.Nanosecond()))
 
 		// add reqID to context
 		c.Set("reqId", reqId)
@@ -52,7 +53,7 @@ func RequestLog() gin.HandlerFunc {
 			zap.String("uri", c.Request.URL.String()),
 			zap.String("client_ip", c.ClientIP()),
 			zap.Int("http_status", c.Writer.Status()),
-			zap.String("elapsed_time", utils.CalcElapsedTime(start)),
+			zap.String("elapsed_time", mathutil.ElapsedTime(start)),
 			zap.String("post_data", postData),
 		)
 	}

@@ -25,7 +25,7 @@ func newGenericLogger() {
 	var err error
 	var cfg zap.Config
 
-	conf, _ := Cfg.StringMap("log")
+	conf := Config.StringMap("log")
 	logFile := conf["logFile"]
 	errFile := conf["errFile"]
 
@@ -72,7 +72,7 @@ func newGenericLogger() {
 func newRotatedLogger() {
 	var cfg zap.Config
 
-	conf, _ := Cfg.StringMap("log")
+	conf := Config.StringMap("log")
 	logFile := conf["logFile"]
 	// errFile := conf["errFile"]
 

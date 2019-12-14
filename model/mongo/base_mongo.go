@@ -31,7 +31,7 @@ var (
 	invalidObjectId = errors.New("mongo: must provide an valid document Id")
 )
 
-func init() {
+func InitMongo() {
 	fmt.Printf("mongo - %s db=%s\n", servers, database)
 
 	if app.Debug {
@@ -41,16 +41,16 @@ func init() {
 	}
 
 	// get config
-	auth = app.Cfg.MustString("mgo.auth")
-	mgoUri = app.Cfg.MustString("mgo.uri")
-	servers = app.Cfg.MustString("mgo.servers")
-	database = app.Cfg.MustString("mgo.database")
+	auth = app.Config.String("mgo.auth")
+	mgoUri = app.Config.String("mgo.uri")
+	servers = app.Config.String("mgo.servers")
+	database = app.Config.String("mgo.database")
 
 	// create connection
 	createConnection()
 }
 
-func (d DebugLogger) Output(calldepth int, s string) error {
+func (d DebugLogger) Output(callDepth int, s string) error {
 	log.Print("mongo: ", s, "\n")
 	return nil
 }
@@ -94,6 +94,11 @@ func WithCollection(collection string, s func(*mgo.Collection) error) error {
 	c := conn.DB(database).C(collection)
 
 	return s(c)
+}
+
+// Conn return connection
+func Conn() *mgo.Session  {
+	return connection
 }
 
 /**

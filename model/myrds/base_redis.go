@@ -1,4 +1,4 @@
-package rds
+package myrds
 
 import (
 	"fmt"
@@ -10,6 +10,11 @@ import (
 )
 
 var pool *redis.Pool
+type rdsConfig struct{
+	Server string
+	Auth string
+	Db int
+}
 
 // redisPrefix
 const redisPrefix = "feeds:"
@@ -25,8 +30,8 @@ func GenRedisKey(tpl string, keys ...interface{}) string {
 
 // init redis connection pool
 // redigo doc https://godoc.org/github.com/gomodule/redigo/redis#pkg-examples
-func init() {
-	conf, _ := app.Cfg.StringMap("redis")
+func InitRedis() {
+	conf := app.Config.StringMap("redis")
 
 	// 从配置文件获取redis的ip以及db
 	redisUrl := conf["server"]
