@@ -15,12 +15,12 @@ func SwagDoc(c *gin.Context) {
 	fInfo, _ := os.Stat("static/swagger.json")
 
 	data := map[string]string{
-		"EnvName":        app.EnvName,
+		"EnvName":    app.EnvName,
 		"AppName":    app.Name,
 		"JsonFile":   "/static/swagger.json",
 		"SwgUIPath":  "/static/swagger-ui",
 		"AssetPath":  "/static",
-		"UpdateTime": fInfo.ModTime().Format(app.BaseDate),
+		"UpdateTime": fInfo.ModTime().Format(app.DateFormat),
 	}
 
 	c.HTML(200, "swagger.tpl", data)

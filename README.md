@@ -41,6 +41,12 @@
 - 运行 `go mod tiidy` 安装依赖库
 - 运行项目：`go run main.go`
 
+## 开发说明
+
+```go
+name := app.Config.String("name")
+```
+
 ## 使用帮助
 
 - 运行测试

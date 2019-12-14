@@ -36,11 +36,6 @@ func NewRedisPool(url, password string, redisDb int) *redis.Pool {
 }
 
 // @see https://git-books.github.io/books/go-web-programme/?p=05.6.md
-func CloseRedisPool(pl *redis.Pool) {
-	pl.Close()
-}
-
-// @see https://git-books.github.io/books/go-web-programme/?p=05.6.md
 // func closePool() {
 //    c := make(chan os.Signal, 1)
 //    signal.Notify(c, os.Interrupt)
