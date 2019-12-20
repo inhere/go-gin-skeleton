@@ -18,7 +18,6 @@ docs/docs.go
 .idea/
 temp/
 *.xml
-*.md
 *.yml
 *.yaml
 *.css.map
